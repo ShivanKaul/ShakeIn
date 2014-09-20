@@ -20,5 +20,11 @@ android {
 }
 
 dependencies {
+    compile 'com.getpebble:pebblekit:2.5.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public/" }
 }
