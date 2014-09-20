@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "hack_the_north.shake_in"
         minSdkVersion 15
-        targetSdkVersion 20
+        targetSdkVersion 16
         versionCode 1
         versionName "1.0"
     }
