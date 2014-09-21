@@ -1,18 +1,62 @@
 package hack_the_north.shake_in;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class LinkedInActivity extends Activity {
+
+    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    // App hard-coded UUID
+    private final UUID MY_UUID = UUID.fromString("894d4780-4180-11e4-916c-0800200c9a66");
+    private BluetoothService mBluetoothService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linked_in);
+
+        // Code to manage Service lifecycle.
+        final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder service) {
+                mBluetoothService = ((BluetoothService.LocalBinder) service).getService();
+                if (!mBluetoothService.initialize()) {
+                    Log.e(TAG, "Unable to initialize Bluetooth");
+                    finish();
+                }
+                // Automatically connects to the device upon successful start-up initialization.
+                mBluetoothService.connect(mDeviceAddress);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                mBluetoothService = null;
+            }
+        };
     }
+
+
 
 
     @Override
